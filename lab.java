@@ -46,8 +46,6 @@ public class lab {
 
 					System.out.printf("%.5f ", g[i][j]);
 
-					//if (signs_before_dot > 1){System.out.println("alarm!");}
-
 					for (int k = 0; k < 4 - signs_before_dot; k++){
 						System.out.print(" ");
 					}
