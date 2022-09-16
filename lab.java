@@ -1,5 +1,3 @@
-package lab;
-
 import static java.lang.Math.*;
 
 public class lab {
@@ -19,6 +17,8 @@ public class lab {
 		}
 
 		double[][] g = new double[11][13];
+		int max_num = 0; // for max_length
+		int min_num = 0; // for max_length
 		for (int i = 0; i < 11; i++){
 			for (int j = 0; j < 13; j++){
 				if (b[i] == 15){
@@ -28,28 +28,63 @@ public class lab {
 				} else{
 					g[i][j] = cos(pow(0.5 / (1 - pow(2 * pow(0.25 / x[j], x[j]), 3)), 2));
 				}
-				
+
+				if ((int)round(g[i][j]) > max_num){
+					max_num = (int)round(g[i][j]);
+				}
+				if ((int)round(g[i][j]) < min_num){
+					min_num = (int)round(g[i][j]);
+				}
+			}
+		}
+
+		// count max number of symbols before the dot
+		int max_length1 = 0;
+		int max_length2 = 0;
+		if (max_num > 0){
+			max_length1 = 0;
+			while (max_num > 0){
+				max_num /= 10;
+				max_length1++;
+			}
+		}
+		if (min_num < 0){
+			max_length2 = 1;
+			min_num = abs(min_num);
+			while (min_num > 0){
+				min_num /= 10;
+				max_length2++;
+			}
+		}
+		int max_length = max(max_length1, max_length2);
+		//System.out.println(max_length);	
+
+		for (int i = 0; i < 11; i++){
+			for (int j = 0; j < 13; j++){
 				if (Double.isNaN(g[i][j]) == true) {
-					System.out.printf("NaN        ");
+					System.out.print("NaN");
+					for (int k = 0; k < 3 + max_length; k++){
+						System.out.print(" ");
+					}
 				} else {
-					int signs_before_dot = 1;
-					if (g[i][j] < 0){
+					int signs_before_dot = 0;
+					int tmp = (int)ceil(g[i][j]);
+					if (tmp < 0){
 						signs_before_dot++;
+						tmp = abs(tmp);
 					}
-					if ((int)g[i][j] / 1000 % 10 > 0){
-						signs_before_dot += 3;
-					} else if ((int)g[i][j] / 100 % 10 > 0){
-						signs_before_dot += 2;
-					} else if ((int)g[i][j] / 10 % 10 > 0){
+					while(tmp > 0){
+						tmp /= 10;
 						signs_before_dot++;
 					}
 
-					System.out.printf("%.5f ", g[i][j]);
+					System.out.printf("%.5f", g[i][j]);
 
-					for (int k = 0; k < 4 - signs_before_dot; k++){
+					for (int k = 0; k < max_length - signs_before_dot; k++){
 						System.out.print(" ");
 					}
 				}
+				System.out.print(" ");
 			}
 			System.out.println();
 		}
